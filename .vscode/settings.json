@@ -1,0 +1,8 @@
+{
+  "dart.flutterSdkPath": ".fvm/versions/3.44.0",
+  "editor.formatOnSave": true,
+  "files.exclude": {
+    "**/.dart_tool": true,
+    "**/build": true
+  }
+}

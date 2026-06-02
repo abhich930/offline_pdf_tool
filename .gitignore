@@ -1,0 +1,25 @@
+# Flutter/Dart
+.dart_tool/
+.packages
+.pub/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.flutter
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# Platform generated
+ios/Pods/
+ios/.symlinks/
+macos/Pods/
+
+# FVM
+.fvm/
+
+# OS
+.DS_Store
