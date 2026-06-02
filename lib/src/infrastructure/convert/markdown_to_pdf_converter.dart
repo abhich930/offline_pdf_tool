@@ -72,17 +72,22 @@ class _MarkdownPdfRenderer {
 
     switch (node.tag) {
       case 'h1':
-        _drawTextBlock(node.textContent.trim(), font: _headingFont(24), indentLevel: indentLevel);
+        _drawTextBlock(node.textContent.trim(),
+            font: _headingFont(24), indentLevel: indentLevel);
       case 'h2':
-        _drawTextBlock(node.textContent.trim(), font: _headingFont(20), indentLevel: indentLevel);
+        _drawTextBlock(node.textContent.trim(),
+            font: _headingFont(20), indentLevel: indentLevel);
       case 'h3':
-        _drawTextBlock(node.textContent.trim(), font: _headingFont(17), indentLevel: indentLevel);
+        _drawTextBlock(node.textContent.trim(),
+            font: _headingFont(17), indentLevel: indentLevel);
       case 'h4':
       case 'h5':
       case 'h6':
-        _drawTextBlock(node.textContent.trim(), font: _headingFont(14), indentLevel: indentLevel);
+        _drawTextBlock(node.textContent.trim(),
+            font: _headingFont(14), indentLevel: indentLevel);
       case 'p':
-        _drawTextBlock(_inlineText(node).trim(), font: _bodyFont(), indentLevel: indentLevel);
+        _drawTextBlock(_inlineText(node).trim(),
+            font: _bodyFont(), indentLevel: indentLevel);
       case 'blockquote':
         _drawTextBlock(
           _inlineText(node).trim(),
@@ -113,8 +118,13 @@ class _MarkdownPdfRenderer {
     }
   }
 
-  void _renderList(md.Element list, {required bool ordered, required int indentLevel}) {
-    final items = list.children?.whereType<md.Element>().where((child) => child.tag == 'li').toList() ?? const [];
+  void _renderList(md.Element list,
+      {required bool ordered, required int indentLevel}) {
+    final items = list.children
+            ?.whereType<md.Element>()
+            .where((child) => child.tag == 'li')
+            .toList() ??
+        const [];
     for (var i = 0; i < items.length; i++) {
       final prefix = ordered ? '${i + 1}. ' : '• ';
       final inlineParts = <String>[];
@@ -131,7 +141,8 @@ class _MarkdownPdfRenderer {
         }
       }
 
-      final itemText = inlineParts.join(' ').replaceAll(RegExp(r'\s+'), ' ').trim();
+      final itemText =
+          inlineParts.join(' ').replaceAll(RegExp(r'\s+'), ' ').trim();
       if (itemText.isNotEmpty) {
         _drawTextBlock(
           '$prefix$itemText',
@@ -141,7 +152,8 @@ class _MarkdownPdfRenderer {
       }
 
       for (final nested in nestedLists) {
-        _renderList(nested, ordered: nested.tag == 'ol', indentLevel: indentLevel + 1);
+        _renderList(nested,
+            ordered: nested.tag == 'ol', indentLevel: indentLevel + 1);
       }
     }
   }
@@ -149,7 +161,7 @@ class _MarkdownPdfRenderer {
   void _drawCodeBlock(String text) {
     final lines = text.replaceAll('\t', '  ').split('\n');
     final font = PdfStandardFont(PdfFontFamily.courier, 10);
-    final indent = _pageMargin;
+    const indent = _pageMargin;
     final blockWidth = _usableWidth;
     const innerPadding = 10.0;
 
@@ -218,7 +230,8 @@ class _MarkdownPdfRenderer {
     final maxWidth = _usableWidth - indent;
     final lines = text
         .split('\n')
-        .expand((line) => _wrapText(line.trim().isEmpty ? ' ' : line.trim(), font: font, maxWidth: maxWidth))
+        .expand((line) => _wrapText(line.trim().isEmpty ? ' ' : line.trim(),
+            font: font, maxWidth: maxWidth))
         .toList();
 
     for (final line in lines) {
@@ -228,7 +241,8 @@ class _MarkdownPdfRenderer {
         line,
         font,
         brush: effectiveBrush,
-        bounds: Rect.fromLTWH(_pageMargin + indent, _cursorY, maxWidth, lineHeight),
+        bounds:
+            Rect.fromLTWH(_pageMargin + indent, _cursorY, maxWidth, lineHeight),
       );
       _cursorY += lineHeight;
     }
@@ -236,7 +250,8 @@ class _MarkdownPdfRenderer {
     _cursorY += _sectionGap;
   }
 
-  List<String> _wrapText(String text, {required PdfFont font, required double maxWidth}) {
+  List<String> _wrapText(String text,
+      {required PdfFont font, required double maxWidth}) {
     final normalized = text.replaceAll(RegExp(r'\s+'), ' ').trimRight();
     if (normalized.isEmpty) return const [''];
 
