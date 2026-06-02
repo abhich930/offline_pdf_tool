@@ -6,7 +6,8 @@ import '../../infrastructure/jobs/task_executor_service.dart';
 import '../shared/file_flow_support.dart';
 
 class PdfToolsPage extends StatelessWidget {
-  const PdfToolsPage({super.key, required this.taskExecutor, required this.isBusy});
+  const PdfToolsPage(
+      {super.key, required this.taskExecutor, required this.isBusy});
 
   final TaskExecutorService taskExecutor;
   final ValueNotifier<bool> isBusy;
@@ -106,7 +107,8 @@ class PdfToolsPage extends StatelessWidget {
 
   Future<void> _runRotate(BuildContext context) async {
     try {
-      final inputPaths = await FileFlowSupport.pickInputPaths(JobType.rotatePages);
+      final inputPaths =
+          await FileFlowSupport.pickInputPaths(JobType.rotatePages);
       if (inputPaths == null || inputPaths.isEmpty || !context.mounted) return;
 
       final config = await _showRotateDialog(context);
@@ -138,7 +140,8 @@ class PdfToolsPage extends StatelessWidget {
 
   Future<void> _runReorderOrDelete(BuildContext context) async {
     try {
-      final inputPaths = await FileFlowSupport.pickInputPaths(JobType.reorderPages);
+      final inputPaths =
+          await FileFlowSupport.pickInputPaths(JobType.reorderPages);
       if (inputPaths == null || inputPaths.isEmpty || !context.mounted) return;
 
       final config = await _showReorderDeleteDialog(context);
@@ -152,7 +155,9 @@ class PdfToolsPage extends StatelessWidget {
 
       await _execute(
         context,
-        label: config.type == JobType.deletePages ? 'Delete Pages' : 'Reorder Pages',
+        label: config.type == JobType.deletePages
+            ? 'Delete Pages'
+            : 'Reorder Pages',
         request: JobRequest(
           type: config.type,
           inputPaths: inputPaths,
@@ -169,7 +174,8 @@ class PdfToolsPage extends StatelessWidget {
 
   Future<void> _runCompress(BuildContext context) async {
     try {
-      final inputPaths = await FileFlowSupport.pickInputPaths(JobType.compressPdf);
+      final inputPaths =
+          await FileFlowSupport.pickInputPaths(JobType.compressPdf);
       if (inputPaths == null || inputPaths.isEmpty || !context.mounted) return;
 
       final preset = await _showPresetDialog(context);
@@ -203,7 +209,8 @@ class PdfToolsPage extends StatelessWidget {
   }) async {
     if (isBusy.value) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please wait for the current task to finish.')),
+        const SnackBar(
+            content: Text('Please wait for the current task to finish.')),
       );
       return;
     }
@@ -303,7 +310,7 @@ class PdfToolsPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   DropdownButtonFormField<int>(
-                    value: angle,
+                    initialValue: angle,
                     decoration: const InputDecoration(labelText: 'Angle'),
                     items: const [
                       DropdownMenuItem(value: 90, child: Text('90°')),
@@ -327,7 +334,8 @@ class PdfToolsPage extends StatelessWidget {
                   onPressed: () {
                     try {
                       final pages = parsePositiveIntList(controller.text);
-                      Navigator.of(dialogContext).pop(_RotateDialogResult(pages, angle));
+                      Navigator.of(dialogContext)
+                          .pop(_RotateDialogResult(pages, angle));
                     } on FormatException catch (error) {
                       setState(() => errorText = error.message);
                     }
@@ -345,7 +353,8 @@ class PdfToolsPage extends StatelessWidget {
     return result;
   }
 
-  Future<_ReorderDeleteDialogResult?> _showReorderDeleteDialog(BuildContext context) async {
+  Future<_ReorderDeleteDialogResult?> _showReorderDeleteDialog(
+      BuildContext context) async {
     final controller = TextEditingController(text: '1');
 
     final result = await showDialog<_ReorderDeleteDialogResult>(
@@ -366,7 +375,7 @@ class PdfToolsPage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   DropdownButtonFormField<JobType>(
-                    value: mode,
+                    initialValue: mode,
                     decoration: const InputDecoration(labelText: 'Action'),
                     items: const [
                       DropdownMenuItem(
@@ -404,7 +413,8 @@ class PdfToolsPage extends StatelessWidget {
                   onPressed: () {
                     try {
                       final values = parsePositiveIntList(controller.text);
-                      Navigator.of(dialogContext).pop(_ReorderDeleteDialogResult(mode, values));
+                      Navigator.of(dialogContext)
+                          .pop(_ReorderDeleteDialogResult(mode, values));
                     } on FormatException catch (error) {
                       setState(() => errorText = error.message);
                     }
@@ -433,12 +443,14 @@ class PdfToolsPage extends StatelessWidget {
             return AlertDialog(
               title: const Text('Compression Preset'),
               content: DropdownButtonFormField<String>(
-                value: preset,
+                initialValue: preset,
                 decoration: const InputDecoration(labelText: 'Preset'),
                 items: const [
-                  DropdownMenuItem(value: 'low', child: Text('Low compression')),
+                  DropdownMenuItem(
+                      value: 'low', child: Text('Low compression')),
                   DropdownMenuItem(value: 'balanced', child: Text('Balanced')),
-                  DropdownMenuItem(value: 'high', child: Text('High compression')),
+                  DropdownMenuItem(
+                      value: 'high', child: Text('High compression')),
                 ],
                 onChanged: (value) {
                   if (value != null) {

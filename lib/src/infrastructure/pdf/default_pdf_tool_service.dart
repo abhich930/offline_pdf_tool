@@ -194,7 +194,13 @@ class DefaultPdfToolService implements PdfToolService {
   }
 
   void _appendPageAsTemplate(PdfDocument target, PdfPage sourcePage) {
+    final orientation = sourcePage.size.width > sourcePage.size.height
+        ? PdfPageOrientation.landscape
+        : PdfPageOrientation.portrait;
+    target.pageSettings.orientation = orientation;
     target.pageSettings.size = sourcePage.size;
+    target.pageSettings.rotate = sourcePage.rotation;
+    target.pageSettings.margins.all = 0;
     final newPage = target.pages.add();
     newPage.graphics.drawPdfTemplate(
       sourcePage.createTemplate(),
